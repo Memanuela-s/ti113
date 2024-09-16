@@ -3,15 +3,10 @@
 
 function cadastrarEExibirPessoas() {
   let pessoas = [];
-  let limitePessoas = 2;
+  let limitePessoas = 50;
 
   for (let i = 0; i < limitePessoas; i++) {
-    let opcao = prompt('Digite "SIM" para cadastrar uma pessoa ou qualquer outra tecla para sair:').toUpperCase();
-
-    if (opcao !== 'SIM') {
-      break;
-    }
-
+  
     let nome = prompt('Digite o nome da pessoa:');
     let salarioBruto = parseFloat(prompt('Digite o salário bruto:'));
 
