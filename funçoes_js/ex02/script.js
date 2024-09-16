@@ -27,4 +27,4 @@ let resultado = calcularMedia(lista);
 alert(`Notas Informadas: ${lista.join(",")}
         Média: ${resultado}`);
 
-        /*auxilio do professor*/
+        /* correção do professor*/

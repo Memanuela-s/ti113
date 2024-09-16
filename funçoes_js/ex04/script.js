@@ -1,27 +1,56 @@
 /*Ex4: Crie um algoritmo usando funções que tenha um menu de cadastro de nomes e salários bruto de até 50 pessoas,
  e ao final, mostre os nomes, salários brutos e os salários líquidos de todos que foram lidos, considerando 10% de INSS a descontar.*/
 
- function cadastrarPessoas() {
-  const pessoas = [];
-  let opcao = '';
+function cadastrarEExibirPessoas() {
+  let pessoas = [];
+  let limitePessoas = 2;
 
-  do {
-    opcao = prompt('Digite "C" para cadastrar uma pessoa ou qualquer outra tecla para sair:');
-    opcao = opcao.toUpperCase();
+  for (let i = 0; i < limitePessoas; i++) {
+    let opcao = prompt('Digite "SIM" para cadastrar uma pessoa ou qualquer outra tecla para sair:').toUpperCase();
 
-    if (opcao === 'C') {
-      if (pessoas.length < 50) {
-        const nome = prompt('Digite o nome da pessoa:');
-        const salarioBruto = parseFloat(prompt('Digite o salário bruto:'));
+    if (opcao !== 'SIM') {
+      break;
+    }
 
-        const pessoa = {
-          nome,
-          salarioBruto,
-          salarioLiquido: salarioBruto * 0.9,
-        };
+    let nome = prompt('Digite o nome da pessoa:');
+    let salarioBruto = parseFloat(prompt('Digite o salário bruto:'));
 
-        pessoas.push(pessoa);
-      } else {
-        alert('Limite de 50 pessoas atingido!');
-      }
-    
+    // Valida o salário bruto
+    while (isNaN(salarioBruto) || salarioBruto < 0) {
+      alert('Salário bruto inválido. Digite um valor numérico positivo.');
+      salarioBruto = parseFloat(prompt('Digite o salário bruto:'));
+    }
+
+    let salarioLiquido = salarioBruto * 0.9; // Desconto de 10%
+
+    pessoas.push({
+      nome: nome,
+      salarioBruto: salarioBruto,
+      salarioLiquido: salarioLiquido
+    });
+
+    // Se o limite de pessoas for alcançado, sair do loop
+    if (pessoas.length >= limitePessoas) {
+      alert(`Limite de ${limitePessoas} pessoas atingido!`);
+      break;
+    }
+
+  }
+
+  // Construir a string do relatório
+  let relatorio = 'Relatório de Pessoas Cadastradas\n';
+  relatorio += '------------------------------------\n';
+  relatorio += 'Nome /  / Salário Bruto / / Salário Líquido\n';
+
+  for (let j = 0; j < pessoas.length; j++) {
+    let pessoa = pessoas[j];
+    relatorio += `${pessoa.nome.padEnd(15)}\tR$ ${pessoa.salarioBruto.toFixed(2).padStart(10)}\tR$ ${pessoa.salarioLiquido.toFixed(2).padStart(10)}\n`;
+  }
+
+  // Exibe o relatório
+  alert(relatorio);
+}
+
+// Chamada da função
+cadastrarEExibirPessoas();
+
