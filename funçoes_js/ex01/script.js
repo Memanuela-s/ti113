@@ -24,7 +24,7 @@ alert(lista.join(",")); */
 }
 
 let lista = lerNumero();
-alert(lista.join(","));  ajuda do professor*/
+alert(lista.join(","));  correção do professor*/
 
 
 function readVector() {
