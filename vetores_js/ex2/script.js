@@ -10,35 +10,78 @@ notas de até 100 pessoas e mostre-os no fim do cadastro com as respectivas méd
 Exiba todos os cadastrados na página HTML.*/
 
 
-const alunos = [];
-
-function validarEntrada(promptMsg, validator) {
-  let valor;
-  do {
-    valor = prompt(promptMsg);
-  } while (!validator(valor));
-  return valor;
+// Função para validar o nome completo
+function validarNome(nome) {
+    const regex = /^[A-Za-zÀ-ÿ]+\s[A-Za-zÀ-ÿ]+$/;
+    return regex.test(nome.trim());
 }
 
-function cadastrarAluno() {
-  const nome = validarEntrada("Informe o nome completo (nome e sobrenome):", nome => nome.trim() && nome.split(" ").length >= 2);
-  let matricula = validarEntrada("Informe a matrícula (8 dígitos):", matricula => /^\d{8}$/.test(matricula));
-
-  // Verificar se a matrícula já existe
-  while (alunos.some(aluno => aluno.matricula === matricula)) {
-    console.log("Matrícula já cadastrada. Tente novamente.");
-    matricula = validarEntrada("Informe a matrícula (8 dígitos):", matricula => /^\d{8}$/.test(matricula));
-  }
-
-  const materias = validarEntrada("Informe as matérias separadas por vírgula:", materias => materias.split(',').every(m => m.trim()));
-
-  // Permitir um número variável de notas
-  const numNotas = parseInt(prompt("Quantas notas deseja cadastrar?"));
-  const notas = [];
-  for (let i = 1; i <= numNotas; i++) {
-    notas.push(validarEntrada(`Informe a nota ${i} (entre 0 e 10):`, nota => !isNaN(nota) && nota >= 0 && nota <= 10));
-  }
-
-  alunos.push({ nome, matricula, materias, notas });
-  alert(`${nome} cadastrado com sucesso!`);
+// Função para validar matrícula
+function validarMatricula(matricula) {
+    const regex = /^\d{8}$/;
+    return regex.test(matricula.trim());
 }
+
+// Função para validar notas
+function validarNota(nota) {
+    return nota >= 0 && nota <= 10;
+}
+
+// Função para calcular a média
+function calcularMedia(notas) {
+    const soma = notas.reduce((acc, nota) => acc + nota, 0);
+    return soma / notas.length;
+}
+
+// Função principal para cadastrar alunos
+function cadastrarAlunos() {
+    const alunos = [];
+    const quantidadeMinima = 2;
+
+    while (alunos.length < quantidadeMinima) {
+        const nome = prompt("Informe o nome completo do aluno (nome e sobrenome):");
+        if (!validarNome(nome)) {
+            alert("Nome inválido. Por favor, informe um nome completo (nome e sobrenome).");
+            continue;
+        }
+
+        const matricula = prompt("Informe a matrícula do aluno (8 dígitos):");
+        if (!validarMatricula(matricula)) {
+            alert("Matrícula inválida. Deve conter exatamente 8 dígitos.");
+            continue;
+        }
+
+        const notas = [];
+        for (let i = 1; i <= 3; i++) {
+            let nota;
+            do {
+                nota = parseFloat(prompt(`Informe a nota ${i} (0 a 10):`));
+                if (!validarNota(nota)) {
+                    alert("Nota inválida. Deve ser entre 0 e 10.");
+                }
+            } while (!validarNota(nota));
+            notas.push(nota);
+        }
+
+        const media = calcularMedia(notas);
+        alunos.push({ nome, matricula, notas, media });
+    }
+
+    exibirAlunos(alunos);
+}
+
+// Função para exibir alunos cadastrados
+function exibirAlunos(alunos) {
+    let resultado = "Alunos cadastrados:\n";
+    alunos.forEach(aluno => {
+        resultado += `Nome: ${aluno.nome}, Matrícula: ${aluno.matricula}, ` +
+                    `N1: ${aluno.notas[0].toFixed(2).replace('.', ',')} / ` +
+                    `N2: ${aluno.notas[1].toFixed(2).replace('.', ',')} / ` +
+                    `N3: ${aluno.notas[2].toFixed(2).replace('.', ',')} / ` +
+                    `Media: ${aluno.media.toFixed(2).replace('.', ',')}\n`;
+    });
+    alert(resultado);
+}
+
+// Iniciar o cadastro
+cadastrarAlunos();
